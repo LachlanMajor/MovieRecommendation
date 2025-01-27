@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+
+{% block content%}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<br />
+<div align="center">
+    <form method="POST">
+        <div class="form-group">
+            <label for="genres">Select Genre:</label>
+            <select id="genres" name="genres[]" multiple="multiple" style="width: 100%;">
+                <option value="">Any Genre</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Animation">Animation</option>
+                <option value="Children">Children</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Crime">Crime</option>
+                <option value="Documentary">Documentary</option>
+                <option value="Drama">Drama</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Film-Noir">Film-Noir</option>
+                <option value="Horror">Horror</option>
+                <option value="Musical">Musical</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+                <option value="War">War</option>
+                <option value="Western">Western</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Recommendations</button>
+    </form>
+</div>
+<ul class="list-group list-group-flush" id="recommendations">
+    {% for rec in recommendations %}
+    <li class="list-group-item d-flex justify-content-between">
+        <span>{{ rec.Movie }}</span>
+        <span>{{ rec['Expected Rating']|round(2) }}/5.0</span>
+    </li>
+    {% endfor %}
+</ul>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#genres').select2({
+            placeholder: "Select a genre",
+            allowClear: true,
+            closeOnSelect: false
+        });
+    });
+</script>
+{% endblock %}
