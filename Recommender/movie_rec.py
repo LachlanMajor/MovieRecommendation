@@ -12,6 +12,8 @@ ratings = ratings.drop(columns=['Date', 'Letterboxd URI'])
 movies = pd.read_csv("Recommender/movies.csv")
 # Remove (year) from titles
 movies[['title', 'year']] = movies['title'].str.extract(r'^(.*)\s\((\d{4})\)$')
+movies['year'] = pd.to_numeric(movies['year'], errors='coerce')
+movies['year'] = movies['year'].fillna(0).astype(int)
 # Remove Nan titles
 movies= movies.dropna(subset=['title']).reset_index(drop=True)
 
@@ -37,7 +39,7 @@ all_ratings['title'] = all_ratings['title'].apply(move_article_to_front)
 
 # Limit the included movies to movies with a minimum number of ratings
 ratings_per_movie = all_ratings.groupby('movieId').size()
-accepted_movies = ratings_per_movie[ratings_per_movie >= 1000].index
+accepted_movies = ratings_per_movie[ratings_per_movie >= 10000].index
 filtered_ratings = all_ratings[all_ratings['movieId'].isin(accepted_movies)]
 num_movies = filtered_ratings['movieId'].nunique()
 print(f"Movies: {num_movies}")
@@ -209,7 +211,7 @@ print(f"Number of test ratings: {len(test_ratings)}")
 print(f"Number of train ratings: {len(train_ratings)}")
 print(f"Number of total ratings: {len(ratings)}")
 
-def recommend_movies(user_ratings, movie_similarity_df):
+def recommend_movies(user_ratings, movie_similarity_df, selected_genres, startYear, endYear):
     recommendations = []
     ratings_count = all_ratings['title'].value_counts()
     already_rated = set(ratings['Name'])
@@ -226,9 +228,19 @@ def recommend_movies(user_ratings, movie_similarity_df):
 
     # Sort the recommendations by expected rating and then by popularity
     recommendations.sort(key=lambda x: (x[1], x[2]), reverse=True)
-    return pd.DataFrame(recommendations, columns=['Movie', 'Expected Rating', 'Popularity'])
+    recommendations = pd.DataFrame(recommendations, columns=['Movie', 'Expected Rating', 'Popularity'])
+    recommendations = recommendations.merge(movies[['title', 'genres', 'year']], left_on='Movie', right_on='title', how='left')
+    recommendations = recommendations.drop(columns=['title'])
+    recommendations = recommendations[recommendations['year'].between(startYear, endYear)]
 
-recommendation_list = recommend_movies(ratings, movie_similarity_df)
+
+    recommendations['genres'] = recommendations['genres'].fillna('Any') 
+    if "Any" not in selected_genres:
+        recommendations = recommendations[recommendations['genres'].apply(lambda g: all(genre in g.split('|') for genre in selected_genres))]
+
+    return recommendations
+
+recommendation_list = recommend_movies(ratings, movie_similarity_df, ["Action", "Drama"], 1900, 2024)
 print(recommendation_list.head(20).to_string(index=False))
 
 bins = [0, 1, 2, 3, 4, 5]

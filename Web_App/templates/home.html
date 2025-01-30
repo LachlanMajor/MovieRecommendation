@@ -1,34 +1,45 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 
 {% block content%}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
 <br />
 <div align="center">
     <form method="POST">
         <div class="form-group">
-            <label for="genres">Select Genre:</label>
-            <select id="genres" name="genres[]" multiple="multiple" style="width: 100%;">
-                <option value="">Any Genre</option>
-                <option value="Action">Action</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Animation">Animation</option>
-                <option value="Children">Children</option>
-                <option value="Comedy">Comedy</option>
-                <option value="Crime">Crime</option>
-                <option value="Documentary">Documentary</option>
-                <option value="Drama">Drama</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Film-Noir">Film-Noir</option>
-                <option value="Horror">Horror</option>
-                <option value="Musical">Musical</option>
-                <option value="Mystery">Mystery</option>
-                <option value="Romance">Romance</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Thriller">Thriller</option>
-                <option value="War">War</option>
-                <option value="Western">Western</option>
-            </select>
+            <label for="genres">Select Genre
+                <span id="genreArrow" style="cursor: pointer;">&#9655;</span>
+            </label>
+            <label for="years">Year Range
+                <span id="yearArrow" style="cursor: pointer;">&#9655;</span>
+            </label>
+
+            <div id="genreCheckboxes" style="display: none;">
+                <input type="checkbox" id="Any" name="genres" value="Any" checked>Any
+                <input type="checkbox" name="genres" value="Action">Action
+                <input type="checkbox" name="genres" value="Adventure">Adventure
+                <input type="checkbox" name="genres" value="Animation">Animation
+                <input type="checkbox" name="genres" value="Children">Children<br>
+                <input type="checkbox" name="genres" value="Comedy">Comedy
+                <input type="checkbox" name="genres" value="Crime">Crime
+                <input type="checkbox" name="genres" value="Documentary">Documentary
+                <input type="checkbox" name="genres" value="Drama">Drama
+                <input type="checkbox" name="genres" value="Fantasy">Fantasy<br>
+                <input type="checkbox" name="genres" value="Film-Noir">Film-Noir
+                <input type="checkbox" name="genres" value="Horror">Horror
+                <input type="checkbox" name="genres" value="Musical">Musical
+                <input type="checkbox" name="genres" value="Mystery">Mystery
+                <input type="checkbox" name="genres" value="Romance">Romance<br>
+                <input type="checkbox" name="genres" value="Sci-Fi">Sci-Fi
+                <input type="checkbox" name="genres" value="Thriller">Thriller
+                <input type="checkbox" name="genres" value="War">War
+                <input type="checkbox" name="genres" value="Western">Western
+            </div>
+            <br>
+            <div id="yearRanges" style="display: none;">
+                <label for="startYear">Start Year:</label>
+                <input type="number" id="startYear" name="startYear" min="1800" max="2100">
+                <label for="endYear">End Year:</label>
+                <input type="number" id="endYear" name="endYear" min="1800" max="2100">
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">Get Recommendations</button>
     </form>
@@ -38,18 +49,55 @@
     <li class="list-group-item d-flex justify-content-between">
         <span>{{ rec.Movie }}</span>
         <span>{{ rec['Expected Rating']|round(2) }}/5.0</span>
+        <span>{{ rec['genres']}}</span>
+        <span>{{ rec['year']}}</span>
     </li>
     {% endfor %}
 </ul>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#genres').select2({
-            placeholder: "Select a genre",
-            allowClear: true,
-            closeOnSelect: false
-        });
-    });
+    const genreArrow = document.getElementById('genreArrow');
+    const yearArrow = document.getElementById('yearArrow');
+    const anyCheckbox = document.getElementById('Any');
+    const genreCheckboxes = document.querySelectorAll('input[name="genres"]:not(#Any)');
+
+    genreArrow.addEventListener('click', () => {
+        const genreCheckboxes = document.getElementById('genreCheckboxes');
+        if (genreCheckboxes.style.display === 'none') {
+            genreCheckboxes.style.display = 'block';
+            genreArrow.innerHTML = '&#9660;';
+        } else {
+            genreCheckboxes.style.display = 'none';
+            genreArrow.innerHTML = '&#9655;';
+        }
+    })
+
+    yearArrow.addEventListener('click', () => {
+        const yearRangesDiv = document.getElementById('yearRanges');
+        if (yearRangesDiv.style.display === 'none') {
+            yearRangesDiv.style.display = 'block';
+            yearArrow.innerHTML = '&#9660;';
+        } else {
+            yearRangesDiv.style.display = 'none';
+            yearArrow.innerHTML = '&#9655;';
+        }
+    })
+    anyCheckbox.addEventListener('change', () => {
+        if (anyCheckbox.checked) {
+            genreCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            })
+        }
+    })
+    genreCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            if (Array.from(genreCheckboxes).some(cb => cb.checked)) {
+                anyCheckbox.checked = false;
+            }
+            else {
+                anyCheckbox.checked = true;
+            }
+        })
+    })
 </script>
 {% endblock %}
