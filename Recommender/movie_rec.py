@@ -3,10 +3,18 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from sklearn.metrics.pairwise import cosine_similarity
 import re
+import time
+
+set_time = time.time()
+print(f"Time to set up: {set_time}")
 
 # User ratings from letterboxd csv 
 ratings = pd.read_csv("Recommender/ratings.csv")
 ratings = ratings.drop(columns=['Date', 'Letterboxd URI'])
+
+ratings_time = time.time()
+print(f"Time to load in ratings: {ratings_time - set_time}")
+
 
 # Collection of movie titles with their genres
 movies = pd.read_csv("Recommender/movies.csv")
@@ -17,7 +25,11 @@ movies['year'] = movies['year'].fillna(0).astype(int)
 # Remove Nan titles
 movies= movies.dropna(subset=['title']).reset_index(drop=True)
 
-# Colletion of ratings to be used in the correlation matrix.
+movies_time = time.time()
+print(f"Time to load in movies: {movies_time - ratings_time}")
+
+
+#Colletion of ratings to be used in the correlation matrix.
 all_ratings = pd.read_csv("Recommender/allratings.csv", index_col=False)
 all_ratings = all_ratings.drop(columns=['timestamp'])
 all_ratings = all_ratings.dropna(subset=['userId', 'movieId', 'rating'])
@@ -25,6 +37,8 @@ all_ratings = all_ratings.dropna(subset=['userId', 'movieId', 'rating'])
 all_ratings = pd.merge(all_ratings, movies)
 # Remove anything in brackets in the title for things like foreign films and the original title
 all_ratings['title'] = all_ratings['title'].str.replace(r'\s*\(.*?\)', '', regex=True)
+load_in = time.time()
+print(f"Time to load in data: {load_in - movies_time}")
 
 # Any title with The, A, or An has it moved to the front
 def move_article_to_front(title):
@@ -35,14 +49,21 @@ def move_article_to_front(title):
     return title
 
 ratings['Name'] = ratings['Name'].apply(move_article_to_front)
-all_ratings['title'] = all_ratings['title'].apply(move_article_to_front)
+#all_ratings['title'] = all_ratings['title'].apply(move_article_to_front)
+move_article_to_front_time = time.time()
+
+print(f"Time to move articles to front: {move_article_to_front_time - load_in}")
+
 
 # Limit the included movies to movies with a minimum number of ratings
 ratings_per_movie = all_ratings.groupby('movieId').size()
-accepted_movies = ratings_per_movie[ratings_per_movie >= 10000].index
+accepted_movies = ratings_per_movie[ratings_per_movie >= 1000].index
 filtered_ratings = all_ratings[all_ratings['movieId'].isin(accepted_movies)]
 num_movies = filtered_ratings['movieId'].nunique()
-print(f"Movies: {num_movies}")
+# print(f"Movies: {num_movies}")
+
+num_movies_times = time.time()
+print(f"Time to filter movies: {num_movies_times - move_article_to_front_time}")
 
 from scipy.sparse import coo_matrix
 
@@ -89,6 +110,9 @@ def make_matrix(fitlered_ratings):
 
 movie_similarity_df, global_mean, movie_means = make_matrix(filtered_ratings)
 
+matrix_time = time.time()
+print(f"Time to make matrix: {matrix_time - num_movies_times}")
+
 import pandas as pd
 from rapidfuzz import process, fuzz
 from difflib import ndiff
@@ -123,6 +147,9 @@ def replace_titles(user_df, movie_similarity_df, threshold=95):
     return user_df
 
 ratings = replace_titles(ratings, movie_similarity_df, threshold=90)
+
+titles_time = time.time()
+print(f"Time to replace titles: {titles_time - matrix_time}")
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -169,6 +196,9 @@ def find_expected_rating(title, user_ratings, movie_similarity_df, global_mean, 
         prediction = prediction.iloc[0]
     return max(0.0, min(5.0, prediction))
 
+predict_time = time.time()
+print(f"Time to predict: {predict_time - titles_time}")
+
 # Compare each actual rating with the expected rating to evaluate the accuracy of the model
 def evaluate_predictions(train_ratings, test_ratings, movie_similarity_df, global_mean, movie_means):
     predictions = []
@@ -203,15 +233,18 @@ def evaluate_predictions(train_ratings, test_ratings, movie_similarity_df, globa
 train_ratings, test_ratings = train_test_split(ratings, test_size=0.20, random_state=1)
 predictions, actuals, titles, mae, rmse, outlier_percent, Nones = evaluate_predictions(train_ratings, test_ratings, movie_similarity_df, global_mean, movie_means)
 
-print(f"Mean Absolute Error (MAE): {mae}")
-print(f"Root Mean Squared Error (RMSE): {rmse}")
-print(f"Outlier Percent: {outlier_percent:.2f}%")
-print(f"Number of Nones: {Nones}")
-print(f"Number of test ratings: {len(test_ratings)}")
-print(f"Number of train ratings: {len(train_ratings)}")
-print(f"Number of total ratings: {len(ratings)}")
+# print(f"Mean Absolute Error (MAE): {mae}")
+# print(f"Root Mean Squared Error (RMSE): {rmse}")
+# print(f"Outlier Percent: {outlier_percent:.2f}%")
+# print(f"Number of Nones: {Nones}")
+# print(f"Number of test ratings: {len(test_ratings)}")
+# print(f"Number of train ratings: {len(train_ratings)}")
+# print(f"Number of total ratings: {len(ratings)}")
 
-def recommend_movies(user_ratings, movie_similarity_df, selected_genres, startYear, endYear):
+evaluate_time = time.time()
+print(f"Time to evaluate: {evaluate_time - predict_time}")
+
+def recommend_movies(user_ratings, movie_similarity_df, selected_genres, startYear, endYear, anySelected):
     recommendations = []
     ratings_count = all_ratings['title'].value_counts()
     already_rated = set(ratings['Name'])
@@ -226,6 +259,9 @@ def recommend_movies(user_ratings, movie_similarity_df, selected_genres, startYe
 
                 recommendations.append((movie, expected_rating, num_ratings))
 
+    rec_time = time.time()
+    print(f"Time to recommend: {rec_time - evaluate_time}")
+
     # Sort the recommendations by expected rating and then by popularity
     recommendations.sort(key=lambda x: (x[1], x[2]), reverse=True)
     recommendations = pd.DataFrame(recommendations, columns=['Movie', 'Expected Rating', 'Popularity'])
@@ -236,17 +272,15 @@ def recommend_movies(user_ratings, movie_similarity_df, selected_genres, startYe
 
     recommendations['genres'] = recommendations['genres'].fillna('Any') 
     if "Any" not in selected_genres:
-        recommendations = recommendations[recommendations['genres'].apply(lambda g: all(genre in g.split('|') for genre in selected_genres))]
+        if anySelected:
+            recommendations = recommendations[recommendations['genres'].apply(lambda g: any(genre in selected_genres for genre in g.split('|')))]
+        else:
+            recommendations = recommendations[recommendations['genres'].apply(lambda g: set(selected_genres).issubset(set(g.split('|'))))]
 
+    rec_time2 = time.time()
+    print(f"Time to filter: {rec_time2 - rec_time}")
+
+    total_time = time.time()
+    print(f"Total time: {total_time - set_time}")
     return recommendations
-
-recommendation_list = recommend_movies(ratings, movie_similarity_df, ["Action", "Drama"], 1900, 2024)
-print(recommendation_list.head(20).to_string(index=False))
-
-bins = [0, 1, 2, 3, 4, 5]
-labels = ['0-1', '1-2', '2-3', '3-4', '4-5']
-recommendation_list['Rating Interval'] = pd.cut(recommendation_list['Expected Rating'], bins=bins, labels=labels, right=False)
-
-rating_distribution = recommendation_list['Rating Interval'].value_counts().sort_index()
-print(rating_distribution)
-
+    
