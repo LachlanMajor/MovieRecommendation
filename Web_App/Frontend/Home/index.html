@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script type="text/javascript" src="index.js" defer></script>
+</head>
+<body>
+        <main onclick=toggleSideBar()>
+            <h2>
+                Test
+            </h2><br>
+            <p onclick=toggleSideBar()>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, a, commodi nesciunt magnam laudantium, voluptatibus perspiciatis pariatur atque quae esse corporis. Doloremque laboriosam rerum cumque error provident aperiam vero veritatis.
+            </p>
+        </main>
+        <nav id="sidebar" open>
+            <ul>
+                <li>
+                    <button onclick=toggleSidebar() id="toggle-btn">
+                        <span class="material-symbols-outlined">settings</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                        <span>Genre</span>
+                        <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                    </button>
+                    <ul class="genre-checkboxes">
+                        <div>
+                            <label for="Action">
+                                <input type="checkbox" id="Action">Action</input>
+                            </label>
+                            <label for="Romance">
+                                <input type="checkbox" id="Romance">Romance</input>
+                            </label>
+                            <label for="Horror">
+                                <input type="checkbox" id="Horror">Horror</input>
+                            </label>
+                        </div>
+                    </ul>
+                </li>
+                <li>
+                    <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                        <span>Years</span>
+                        <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                    </button>
+                    <ul class="yearRange">
+                         <div>
+
+                         </div>
+                    </ul> 
+                </li>
+            </ul>
+        </nav>
+</body>
+</html>

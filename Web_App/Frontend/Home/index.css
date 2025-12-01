@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    background-color: rgb(255, 255, 255);
+}
+
+#sidebar{
+    box-sizing: border-box;
+    height: 100vh;
+    width: 250px;
+    padding: 5px 1em;
+    text-align: right;
+    position: sticky;
+    top: 0;
+    right: 0;
+    align-self: start;
+    transition: 400ms ease-in-out;
+    overflow: hidden;
+    text-wrap: nowrap;
+    border-left: 2px solid;
+}
+
+#sidebar.close{
+    padding: 5px;
+    width: 60px;
+    border: none;
+}
+
+#sidebar ul{
+    list-style: none;
+}
+
+#sidebar ul li:first-child{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#sidebar ul li:not(:first-child){
+    transition: opacity 200ms ease-in-out, visibility 0s 200ms;
+}
+
+#sidebar.close ul li:not(:first-child){
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 200ms ease-in-out, visibility 0s 200ms;
+}
+
+#sidebar .dropdown-btn, #sidebar .toggle-btn{
+    border-radius: 0.5em;
+    border: none;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    gap: 1em
+}
+
+.dropdown-btn {
+    width: auto;
+    text-align: end;
+    background: none;
+    cursor: pointer;
+}
+
+#sidebar .dropdown-btn span{
+    flex-grow: 1;
+}
+
+#sidebar .dropdown-btn:hover{
+    background-color: hsl(0, 3%, 75%);
+}
+
+#sidebar .genre-checkboxes, #sidebar .yearRange{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: 200ms ease-in-out;
+    padding-right: 1em;
+}
+
+#sidebar .genre-checkboxes div, #sidebar .yearRange div{
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-wrap: wrap;
+}
+
+#sidebar .genre-checkboxes label, #sidebar .yearRange label{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#sidebar .genre-checkboxes input{
+    margin: 0;
+    cursor: pointer;
+}
+
+#sidebar .genre-checkboxes.show, #sidebar .yearRange.show{
+    grid-template-rows: 1fr;
+}
+
+.dropdown-btn span{
+    transition: 300ms ease;
+}
+.rotate span:last-child{
+    rotate: 90deg;
+}
+
+#toggle-btn{
+    margin-right: auto;
+    padding: 1em;
+    border: none;
+    border-radius: 0.5em;
+    background: none;
+    cursor: pointer;
+}
+
+#toggle-btn span{
+    transition: rotate 400ms ease
+}
+
+#toggle-btn:hover{
+    background-color: hsl(0, 3%, 75%);
+}
+
+#sidebar ul li{
+    margin-bottom: 20px;
+}
