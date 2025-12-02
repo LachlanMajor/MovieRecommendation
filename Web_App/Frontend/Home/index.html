@@ -25,34 +25,52 @@
                     </button>
                 </li>
                 <li>
-                    <button onclick=toggleSubMenu(this) class="dropdown-btn">
-                        <span>Genre</span>
+                    <button onclick=toggleSubMenu(this) class="dropdown-btn rotate">
+                        <span><strong>Genres</strong></span>
                         <span class="material-symbols-outlined">keyboard_arrow_right</span>
                     </button>
-                    <ul class="genre-checkboxes">
-                        <div>
-                            <label for="Action">
-                                <input type="checkbox" id="Action">Action</input>
-                            </label>
-                            <label for="Romance">
-                                <input type="checkbox" id="Romance">Romance</input>
-                            </label>
-                            <label for="Horror">
-                                <input type="checkbox" id="Horror">Horror</input>
-                            </label>
-                        </div>
+                    <ul class="genre-checkboxes show">
+                        <nav class="selectionTypes">
+                            <!-- TODO: Add handling to unselect an option-->
+                            <input type="radio" id="AnySelected" name="SelectionTypes"/>
+                            <label for="AnySelected">Any Selected</label>
+
+                            <input type="radio" id="AllSelected" name="SelectionTypes"/>
+                            <label for="AllSelected">All Selected</label>
+                        </nav>
+
+                        <label for="Action"><input type="checkbox" id="Action">Action</label>
+                        <label for="Adventure"><input type="checkbox" id="Adventure">Adventure</label>
+                        <label for="Animation"><input type="checkbox" id="Animation">Animation</label>
+                        <label for="Children"><input type="checkbox" id="Children">Children</label>
+                        <label for="Comedy"><input type="checkbox" id="Comedy">Comedy</label>
+                        <label for="Crime"><input type="checkbox" id="Crime">Crime</label>
+                        <label for="Documentary"><input type="checkbox" id="Documentary">Documentary</label>
+                        <label for="Drama"><input type="checkbox" id="Drama">Drama</label>
+                        <label for="Fantasy"><input type="checkbox" id="Fantasy">Fantasy</label>
+                        <label for="Film-Noir"><input type="checkbox" id="Film-Noir">Film-Noir</label>
+                        <label for="Horror"><input type="checkbox" id="Horror">Horror</label>
+                        <label for="Musical"><input type="checkbox" id="Musical">Musical</label>
+                        <label for="Mystery"><input type="checkbox" id="Mystery">Mystery</label>
+                        <label for="Romance"><input type="checkbox" id="Romance">Romance</label>
+                        <label for="Sci-Fi"><input type="checkbox" id="Sci-Fi">Sci-Fi</label>
+                        <label for="Thriller"><input type="checkbox" id="Thriller">Thriller</label>
+                        <label for="War"><input type="checkbox" id="War">War</label>
+                        <label for="Western"><input type="checkbox" id="Western">Western</label>
                     </ul>
                 </li>
                 <li>
-                    <button onclick=toggleSubMenu(this) class="dropdown-btn">
-                        <span>Years</span>
+                    <button onclick=toggleSubMenu(this) class="dropdown-btn rotate">
+                        <span><strong>Years</strong></span>
                         <span class="material-symbols-outlined">keyboard_arrow_right</span>
                     </button>
-                    <ul class="yearRange">
-                         <div>
-
-                         </div>
+                    <ul class="yearRange show">
+                        <label>From</label><input type="number" min="1874" max="2023" value="1900"></label>
+                        <label>To</label><input type="number" min="1874" max="2023" value="2000"></label>
                     </ul> 
+                </li>
+                <li>
+                    <button type="submit" class="submit">Recommend</button>
                 </li>
             </ul>
         </nav>

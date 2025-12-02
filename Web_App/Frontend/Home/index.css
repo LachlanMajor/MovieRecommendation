@@ -14,7 +14,7 @@ body{
 #sidebar{
     box-sizing: border-box;
     height: 100vh;
-    width: 250px;
+    width: 40vh;
     padding: 5px 1em;
     text-align: right;
     position: sticky;
@@ -23,8 +23,9 @@ body{
     align-self: start;
     transition: 400ms ease-in-out;
     overflow: hidden;
-    text-wrap: nowrap;
+    text-wrap: wrap;
     border-left: 2px solid;
+    position: relative;
 }
 
 #sidebar.close{
@@ -49,7 +50,7 @@ body{
 #sidebar.close ul li:not(:first-child){
     opacity: 0;
     visibility: hidden;
-    transition: opacity 200ms ease-in-out, visibility 0s 200ms;
+    transition: opacity 400ms ease-in-out, visibility 0s 400ms;
 }
 
 #sidebar .dropdown-btn, #sidebar .toggle-btn{
@@ -67,10 +68,13 @@ body{
     text-align: end;
     background: none;
     cursor: pointer;
+    margin-top: 20px;
+    font-size: 1em;
 }
 
-#sidebar .dropdown-btn span{
+.dropdown-btn span{
     flex-grow: 1;
+    transition: 400ms ease;
 }
 
 #sidebar .dropdown-btn:hover{
@@ -78,18 +82,21 @@ body{
 }
 
 #sidebar .genre-checkboxes, #sidebar .yearRange{
+    list-style: none;
+    margin: 0;
     display: grid;
-    grid-template-rows: 0fr;
-    transition: 200ms ease-in-out;
+    grid-template-columns: repeat(2, 1fr);
+    transition: max-height 400ms ease-in-out, opacity 400ms ease-in-out, margin-top 400ms ease-in-out;
     padding-right: 1em;
+    gap: 5px 20px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
 }
 
-#sidebar .genre-checkboxes div, #sidebar .yearRange div{
-    overflow: hidden;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    text-wrap: wrap;
+#sidebar .genre-checkboxes.show, #sidebar .yearRange.show{
+    max-height: 1000px;
+    opacity: 1;
 }
 
 #sidebar .genre-checkboxes label, #sidebar .yearRange label{
@@ -100,18 +107,6 @@ body{
     white-space: nowrap;
 }
 
-#sidebar .genre-checkboxes input{
-    margin: 0;
-    cursor: pointer;
-}
-
-#sidebar .genre-checkboxes.show, #sidebar .yearRange.show{
-    grid-template-rows: 1fr;
-}
-
-.dropdown-btn span{
-    transition: 300ms ease;
-}
 .rotate span:last-child{
     rotate: 90deg;
 }
@@ -135,4 +130,58 @@ body{
 
 #sidebar ul li{
     margin-bottom: 20px;
+}
+
+#sidebar .submit{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    border-radius: 5px;
+    background-color: hsl(153, 95%, 55%);
+    color: black;
+    cursor: pointer;
+    padding: 0.5em 2em;
+    font-size: 1.5em;
+}
+
+#sidebar .submit:hover{
+    background-color: hsl(153, 95%, 65%);
+}
+
+.selectionTypes{
+    width: fit-content;
+    border: 1px solid black;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+    margin-bottom: 10px;
+    grid-column: 1 / -1;
+}
+
+.selectionTypes input{
+    display: none;
+}
+
+.selectionTypes label{
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex: 1;
+    text-align: center;
+}
+
+.selectionTypes label:last-of-type{
+    border-right: 0;
+}
+
+.selectionTypes label:hover{
+    background: hsl(153, 95%, 65%);
+}
+
+.selectionTypes input:checked + label{
+    background: hsl(153, 95%, 55%);
 }
