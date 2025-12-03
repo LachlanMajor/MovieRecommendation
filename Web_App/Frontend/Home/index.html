@@ -12,6 +12,9 @@
         <main onclick=toggleSideBar()>
             <section class="container">
                 <div class="slider-wrapper">
+                    <button onclick=changePoster(this) id="leftSlide" class="slideControl">
+                        <span class="material-symbols-outlined">keyboard_arrow_left</span>
+                    </button>
                     <div class="slider">
                         <img id="slide-1" src="../Images/Posters/sevenSamurai.jpg" alt="Seven Samurai Poster"/>
                         <img id="slide-2" src="../Images/Posters/harakiri.jpg" alt="Harakiri Poster"/>
@@ -22,6 +25,9 @@
                         <a href="#slide-2"></a>
                         <a href="#slide-3"></a>
                     </div>
+                    <button onclick=changePoster(this) id="rightSlide" class="slideControl">
+                        <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                    </button>
                 </div>
             </section>
         </main>

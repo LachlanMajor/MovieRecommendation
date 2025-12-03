@@ -280,3 +280,11 @@ input[type="checkbox"]:checked {
     transform: translateX(-50%);
     z-index: 1;
 }
+
+.slideControl {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+}

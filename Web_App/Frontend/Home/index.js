@@ -32,3 +32,15 @@ document.addEventListener('click', function(event) {
         })
     }
 })
+
+function changePoster(button){
+    const slider = document.querySelector('.slider');
+    const slideWidth =  slider.offsetWidth;
+
+    if (button.id === 'leftSlide') {
+        slider.scrollBy({ left: -slideWidth, behavior: 'smooth'})
+    } else {
+        slider.scrollBy({ left: slideWidth, behavior: 'smooth'})
+    }
+
+}
