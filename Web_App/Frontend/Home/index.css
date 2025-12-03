@@ -8,24 +8,41 @@ body{
     min-height: 100dvh;
     display: grid;
     grid-template-columns: 1fr auto;
-    background-color: rgb(255, 255, 255);
+    background-image: url(../Images/movies_collage.jpg);
+    background-repeat: none;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    background-blend-mode: color;
+    overflow-x: hidden;
+}
+
+.mainText{
+    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
 }
 
 #sidebar{
     box-sizing: border-box;
     height: 100vh;
-    width: 40vh;
+    width: clamp(300px, 30vw, 400px);
     padding: 5px 1em;
+    padding-bottom: 100px;
     text-align: right;
-    position: sticky;
     top: 0;
     right: 0;
     align-self: start;
     transition: 400ms ease-in-out;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     text-wrap: wrap;
     border-left: 2px solid;
     position: relative;
+    background-color: white;
 }
 
 #sidebar.close{
@@ -81,17 +98,32 @@ body{
     background-color: hsl(0, 3%, 75%);
 }
 
-#sidebar .genre-checkboxes, #sidebar .yearRange{
+#sidebar .genre-checkboxes{
     list-style: none;
-    margin: 0;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     transition: max-height 400ms ease-in-out, opacity 400ms ease-in-out, margin-top 400ms ease-in-out;
     padding-right: 1em;
     gap: 5px 20px;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
+}
+
+#sidebar .yearRange{
+    list-style: none;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: fit-content;
+    transition: max-height 400ms ease-in-out, opacity 400ms ease-in-out, margin-top 400ms ease-in-out;
+    padding-right: 1em;
+    gap: 5px 20px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    justify-items: center;
 }
 
 #sidebar .genre-checkboxes.show, #sidebar .yearRange.show{
@@ -137,13 +169,14 @@ body{
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
+    display: block;
     border: none;
     border-radius: 5px;
     background-color: hsl(153, 95%, 55%);
     color: black;
     cursor: pointer;
     padding: 0.5em 2em;
-    font-size: 1.5em;
+    font-size: clamp(1.2em, 2vw, 1.5em);
 }
 
 #sidebar .submit:hover{
@@ -158,7 +191,7 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: no-wrap;
-    margin-bottom: 10px;
+    margin: 0 auto 10px auto;
     grid-column: 1 / -1;
 }
 
@@ -184,4 +217,66 @@ body{
 
 .selectionTypes input:checked + label{
     background: hsl(153, 95%, 55%);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+input[type="checkbox"]:hover {
+  background-color: hsl(153, 95%, 65%);
+}
+
+input[type="checkbox"]:checked {
+  background-color: hsl(153, 95%, 55%);
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: clamp(1em, 5vw, 4em);
+}
+
+.slider-wrapper {
+    position: relative;
+    max-width: clamp(12em, 25vw, 15em);
+}
+
+.slider {
+    display: flex;
+    aspect-ratio: 2 / 3;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    box-shadow: 0 1.5em 3rem -0.75em hsla(0, 0%, 0%, 0.25);
+    scrollbar-width: none;
+}
+
+.slider::-webkit-scrollbar{
+    display: none;
+}
+
+.slider img {
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+}
+
+.slider-nav {
+    display: flex;
+    column-gap: 1em;
+    position: absolute;
+    bottom: 1.25em;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
 }
