@@ -70,7 +70,7 @@ async function changePosters(recommendations) {
     let index = 0;
     const slideWidth =  slider.clientWidth;
     console.log(`With index: ${index} slideWith is: ${slideWidth} and scrollLeft: ${slider.scrollLeft}`);
-    const currentIndex = (slideWidth > 0 && slider.scrollLeft> 0) ? Math.round(slider.scrollLeft / slideWidth) : 0;
+    const currentIndex = (slideWidth > 0 && slider.scrollLeft > 0) ? Math.round(slider.scrollLeft / slideWidth) : 0;
     console.log(`With index: ${index} the currentIndex is: ${currentIndex}`)
 
     for (const recommendation of recommendations) {
