@@ -8,24 +8,58 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script type="text/javascript" src="index.js" defer></script>
 </head>
-<body>
-        <main onclick=toggleSideBar()>
+<body id="mainPage">
+        <main onclick=toggleSidebar()>
             <section class="container">
-                <div class="slider-wrapper">
-                    <button onclick=changePoster(this) id="leftSlide" class="slideControl">
+                <div class="slider-wrapper loading">
+                    <button onclick=posterSwap(this) id="leftSlide" class="slideControl">
                         <span class="material-symbols-outlined">keyboard_arrow_left</span>
                     </button>
                     <div class="slider">
-                        <img id="slide-1" src="../Images/Posters/sevenSamurai.jpg" alt="Seven Samurai Poster"/>
-                        <img id="slide-2" src="../Images/Posters/harakiri.jpg" alt="Harakiri Poster"/>
-                        <img id="slide-3" src="../Images/Posters/chungkingExpress.jpg" alt="Chungking Express Poster"/>
+                        <img id="slide-1" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-2" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-3" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-4" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-5" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-6" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-7" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-8" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-9" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-10" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-11" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-12" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-13" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-14" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-15" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-16" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-17" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-18" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-19" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
+                        <img id="slide-20" src="https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg" alt="Harakiri"/>
                     </div>
                     <div class="slider-nav">
                         <a href="#slide-1"></a>
                         <a href="#slide-2"></a>
                         <a href="#slide-3"></a>
+                        <a href="#slide-4"></a>
+                        <a href="#slide-5"></a>
+                        <a href="#slide-6"></a>
+                        <a href="#slide-7"></a>
+                        <a href="#slide-8"></a>
+                        <a href="#slide-9"></a>
+                        <a href="#slide-10"></a>
+                        <a href="#slide-11"></a>
+                        <a href="#slide-12"></a>
+                        <a href="#slide-13"></a>
+                        <a href="#slide-14"></a>
+                        <a href="#slide-15"></a>
+                        <a href="#slide-16"></a>
+                        <a href="#slide-17"></a>
+                        <a href="#slide-18"></a>
+                        <a href="#slide-19"></a>
+                        <a href="#slide-20"></a>
                     </div>
-                    <button onclick=changePoster(this) id="rightSlide" class="slideControl">
+                    <button onclick=posterSwap(this) id="rightSlide" class="slideControl">
                         <span class="material-symbols-outlined">keyboard_arrow_right</span>
                     </button>
                 </div>
@@ -84,7 +118,7 @@
                     </ul> 
                 </li>
                 <li>
-                    <button type="submit" class="submit">Recommend</button>
+                    <button onclick=getRecommendations() type="submit" class="submit">Recommend</button>
                 </li>
             </ul>
         </nav>
