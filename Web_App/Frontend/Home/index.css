@@ -248,7 +248,10 @@ input[type="checkbox"]:checked {
 
 .slider-wrapper {
     position: relative;
-    max-width: clamp(12em, 25vw, 15em);
+    max-width: clamp(10em, 50vw, 30em);
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
 .slider-wrapper.loading {
@@ -286,9 +289,13 @@ input[type="checkbox"]:checked {
 }
 
 .slideControl {
-    color: black;
+    color: white;
     background: none;
     border: none;
-    font-size: 2em;
+    font-size: 1em;
     cursor: pointer;
+}
+
+.slideControl span {
+    font-size: clamp(4rem, 4vw, 8rem);
 }

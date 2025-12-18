@@ -7,8 +7,10 @@ const dotenv = require('dotenv')
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 
-router.get('', (req, res) => {
-    const python = spawn('python', ['-u', '../../Recommender/movie_rec.py']);
+router.post('', (req, res) => {
+    const genres = req.body.genres
+
+    const python = spawn('python', ['-u', '../../Recommender/movie_rec.py', JSON.stringify(genres)]);
 
     let output = '';
 

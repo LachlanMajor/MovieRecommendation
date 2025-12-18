@@ -1,6 +1,7 @@
 const toggleButton = document.getElementById('toggle-btn')
 const sidebar = document.getElementById('sidebar')
 const slider = document.querySelector('.slider');
+const nav = document.getElementById('sliderNav')
 const posters = slider.querySelectorAll('img');
 const background = document.body;
 const filePath = "https://image.tmdb.org/t/p/w500";
@@ -43,7 +44,8 @@ document.addEventListener('click', function(event) {
     }
 })
 
-function posterSwap(button){    
+function posterSwap(button){   
+    const slideWidth =  slider.clientWidth;
     if (button.id === 'leftSlide') {
         slider.scrollBy({ left: -slideWidth, behavior: 'smooth'});
     } else {
@@ -69,27 +71,27 @@ function updateBackground() {
 async function changePosters(recommendations) {
     let index = 0;
     const slideWidth =  slider.clientWidth;
-    console.log(`With index: ${index} slideWith is: ${slideWidth} and scrollLeft: ${slider.scrollLeft}`);
     const currentIndex = (slideWidth > 0 && slider.scrollLeft > 0) ? Math.round(slider.scrollLeft / slideWidth) : 0;
-    console.log(`With index: ${index} the currentIndex is: ${currentIndex}`)
+
+    slider.innerHTML = '';
+    nav.innerHTML = '';
 
     for (const recommendation of recommendations) {
         movie = recommendation['title'];
         year = recommendation['year'];
         id = recommendation['tmdbId']
-        let poster = document.getElementById(`slide-${index+1}`);
+        
+        const img = document.createElement('img');
+        const slideId = `slide-${index+1}`;
+        img.id = slideId;
+        img.alt = movie;
 
         try {
             const response = await fetch(`http://localhost:3000/home/poster?movie=${encodeURIComponent(movie)}&year=${year}&id=${id}`);
             const data = await response.json();
 
             if (data.posterPath) {
-                poster.setAttribute('src', filePath + data.posterPath);
-            }
-
-            if (index === currentIndex) {
-                console.log("Current index being called")
-                background.style.backgroundImage = `url(${filePath_back + data.backdropPath})`;
+                img.src = `${filePath + data.posterPath}`;
             }
 
             movieImages[index] = {
@@ -98,17 +100,34 @@ async function changePosters(recommendations) {
             };
 
         } catch (err) {
-            console.error('Error fetching poster:', err)
+            img.src = "https://image.tmdb.org/t/p/w500/3nPwMd3KviJWaHzG9fZCqlwWMas.jpg"
+            console.error('Error fetching poster:', err);
         }
+
+        slider.appendChild(img);
+
+        const anchor = document.createElement('a');
+        anchor.href = `#${slideId}`
+        nav.appendChild(anchor)
 
         index++;
     }
 
     document.querySelector('.slider-wrapper').classList.remove('loading');
+    background.style.backgroundImage = `url(${filePath_back + movieImages[currentIndex].backdrop})`;
 }
 
 function getRecommendations() {
-    fetch('http://localhost:3000/home')
+    const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const checkedValues = Array.from(checkedBoxes).map(cb => cb.id);
+
+    fetch('http://localhost:3000/home', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ genres: checkedValues })
+    })
     .then(response => {
         if(!response.ok){
             throw new Error(`Server error: ${response.status} ${response.statusText}`)

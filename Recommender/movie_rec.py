@@ -123,7 +123,7 @@ def find_expected_rating(movie_id, user_ratings, sparse_matrix, topk_inds, topk_
     prediction = movie_means.get(movie_id, global_mean) + numerator/denominator + user_bias
     return max(0.0, min(5.0, prediction))
 
-def recommend_movies(user_ratings, all_ratings, sparse_matrix, startYear, endYear, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id):
+def recommend_movies(user_ratings, all_ratings, sparse_matrix, genres, startYear, endYear, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id):
     ratings_count = all_ratings.groupby('movieId').size()
     already_rated = set(user_ratings['movieId'])
     
@@ -183,6 +183,8 @@ def recommend_movies(user_ratings, all_ratings, sparse_matrix, startYear, endYea
         filtered_ratings[['movieId', 'title', 'genres', 'year', 'tmdbId']].drop_duplicates(), 
         on='movieId', how='left'
     )
+
+    recommendations = recommendations[recommendations['genres'].str.contains('|'.join(genres), regex=True)]
     recommendations = recommendations[recommendations['year'].between(startYear, endYear, inclusive='both')]
     recommendations['Rating'] = (recommendations['Rating'] * 2).round() / 2
     
@@ -190,6 +192,7 @@ def recommend_movies(user_ratings, all_ratings, sparse_matrix, startYear, endYea
 
 
 if __name__ == "__main__":
+    genres = json.loads(sys.argv[1])
     start = time.time()
     ratings, all_ratings = setup_data()
     filtered_ratings = popular_movies(all_ratings, 100)
@@ -213,7 +216,7 @@ if __name__ == "__main__":
 
     ratings_with_ids, not_found = map_user_ratings_to_movieids(ratings, filtered_ratings)
 
-    recommendations = recommend_movies(ratings_with_ids, all_ratings, sparse_matrix, 1900, 2024, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id)
+    recommendations = recommend_movies(ratings_with_ids, all_ratings, sparse_matrix, genres, 1900, 2024, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id)
     recommendations_json = json.dumps(recommendations.head(20).to_dict(orient='records'))
     print(f"Total time: {time.time() - start}", file=sys.stderr)
     print(recommendations_json)
