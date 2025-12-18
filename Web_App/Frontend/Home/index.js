@@ -121,12 +121,15 @@ function getRecommendations() {
     const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
     const checkedValues = Array.from(checkedBoxes).map(cb => cb.id);
 
+    const yearRanges = document.querySelectorAll('input[type="number"]');
+    const years = Array.from(yearRanges).map(y => y.value);
+
     fetch('http://localhost:3000/home', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ genres: checkedValues })
+        body: JSON.stringify({ genres: checkedValues, years: years})
     })
     .then(response => {
         if(!response.ok){

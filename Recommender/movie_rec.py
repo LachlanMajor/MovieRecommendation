@@ -193,6 +193,9 @@ def recommend_movies(user_ratings, all_ratings, sparse_matrix, genres, startYear
 
 if __name__ == "__main__":
     genres = json.loads(sys.argv[1])
+    years = json.loads(sys.argv[2])
+    yearFrom = int(years[0])
+    yearTo = int(years[1])
     start = time.time()
     ratings, all_ratings = setup_data()
     filtered_ratings = popular_movies(all_ratings, 100)
@@ -216,7 +219,7 @@ if __name__ == "__main__":
 
     ratings_with_ids, not_found = map_user_ratings_to_movieids(ratings, filtered_ratings)
 
-    recommendations = recommend_movies(ratings_with_ids, all_ratings, sparse_matrix, genres, 1900, 2024, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id)
+    recommendations = recommend_movies(ratings_with_ids, all_ratings, sparse_matrix, genres, yearFrom, yearTo, topk_inds, topk_sims, movie_means, global_mean, movie_index_to_id)
     recommendations_json = json.dumps(recommendations.head(20).to_dict(orient='records'))
     print(f"Total time: {time.time() - start}", file=sys.stderr)
     print(recommendations_json)

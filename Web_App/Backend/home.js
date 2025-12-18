@@ -8,9 +8,10 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 
 router.post('', (req, res) => {
-    const genres = req.body.genres
+    const genres = req.body.genres;
+    const years = req.body.years;
 
-    const python = spawn('python', ['-u', '../../Recommender/movie_rec.py', JSON.stringify(genres)]);
+    const python = spawn('python', ['-u', '../../Recommender/movie_rec.py', JSON.stringify(genres), JSON.stringify(years)]);
 
     let output = '';
 
